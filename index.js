@@ -4,13 +4,13 @@ const express = require('express'),
 const app = express();  
 
 // Forward all requests from /api to http://foo.com/api
-app.use('', function(req, res) {
-    console.log(req.url);
+app.use('/', function(req, res) {
     if (req.url == '/' || !req.url.includes('http')) {
-        res.send('Yo!')
+        res.send('Yo!');
     } else {
-        req.pipe(request(req.url)).pipe(res);
+        const url = new URL(req.url.slice(1));
+        req.pipe(request(url.href)).pipe(res);
     }
 });
 
-app.listen(process.env.PORT || 4000);
+app.listen(process.env.PORT || 3000);

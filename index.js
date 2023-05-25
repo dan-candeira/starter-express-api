@@ -1,7 +1,15 @@
-const express = require('express')
-const app = express()
-app.all('/', (req, res) => {
-    console.log("Just got a request!")
-    res.send('Yo!')
-})
-app.listen(process.env.PORT || 3000)
+const express = require('express'),
+    request = require('request');
+
+const app = express();  
+
+// Forward all requests from /api to http://foo.com/api
+app.use('/', function(req, res) {
+    if (!req.url) {
+        res.send('Yo!')
+    } else {
+        req.pipe(request(req.url)).pipe(res);
+    }
+});
+
+app.listen(process.env.PORT || 3000);
